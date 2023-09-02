@@ -1,9 +1,9 @@
 "use client"
-import Link from "next/link";
-import React, { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { BiSearchAlt } from "react-icons/bi";
 import { GiChicken } from "react-icons/gi";
-import { BiSearchAlt } from "react-icons/bi"
+import React, { useState } from "react";
+import Link from "next/link";
 
 export const Navbar = () => {
     // We keep track wether the sidebar is open or not
