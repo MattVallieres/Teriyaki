@@ -25,9 +25,8 @@ export const Navbar = () => {
                 <div className="flex font-bold uppercase text-sm">
                     <Link href="/search" className="flex items-center px-4 justify-center text-lg text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200"><BiSearchAlt /></Link>
                     <div className="hidden md:flex">
-                        <Link href="/trending" className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Trending</Link>
+                        <Link href="/recommendation" className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Recommendation</Link>
                         <Link href="/popular" className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Popular</Link>
-                        <Link href="/genres" className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Genres</Link>
                     </div>
                     <div className="flex uppercase font-bold">
                         <Link href="/login" className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Login</Link>
@@ -48,12 +47,11 @@ export const Navbar = () => {
                 <ul className="pt-10 flex flex-col p-4 text-md uppercase font-bold">
                     <li className="flex text-xs text-[#818283]">BROWSE</li>
                     <li className="py-2 flex text-[#d4d4d4]"><Link href="/" onClick={handleNav}>Home</Link></li>
-                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/trending" onClick={handleNav}>Trending</Link></li>
-                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/popular">Popular</Link></li>
-                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/genres">Genres</Link></li>
-                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/search" className="flex items-center justify-center text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Search</Link></li>
+                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/recommendation" onClick={handleNav}>Recommendation</Link></li>
+                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/popular" onClick={handleNav}>Popular</Link></li>
+                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/search" onClick={handleNav} className="flex items-center justify-center text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Search</Link></li>
                     <li className="flex text-xs text-[#818283] mt-4">ACCOUNT</li>
-                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/login">Login</Link></li>
+                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/login" onClick={handleNav}>Login</Link></li>
                 </ul>
             </div>
         </nav>

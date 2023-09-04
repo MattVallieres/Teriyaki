@@ -1,14 +1,16 @@
 "use client"
 import { MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 import React, { useEffect, useState } from "react";
-import { FiLoader } from 'react-icons/fi';
+import { GiChicken } from 'react-icons/gi';
 import Link from "next/link";
 
 export default function Popular() {
     // We use 'useState' to create a box of toys for our data, 'fetchRecommend' will store the anime.
-    const [fetchRecommend, setFetchRecommend] = useState([]);
+    const [getPopular, setGetPopular] = useState([]);
     // 'currentPage' keeps track of the page we're currently looking at.
     const [currentPage, setCurrentPage] = useState(1);
+    // When we're waiting to see the anime, we show a spinning icon. When we see the anime, we stop the spinning icon
+    const [isLoading, setIsLoading] = useState(true);
     // 'totalPages' tells us how many pages there are in total.
     const [totalPages, setTotalPages] = useState(0);
     // 'displayedPages' is like the remote control for our page numbers.
@@ -40,7 +42,7 @@ export default function Popular() {
             // We say, "Okay, we're done waiting for the data," and we turn off the waiting light.
             setIsLoading(false);
             // We put the anime toys in our toy box (fetchRecommend).
-            setFetchRecommend(data.data);
+            setGetPopular(data.data);
             // The Internet also told us how many pages there are, so we keep track of that too.
             setTotalPages(data.pagination.last_visible_page);
         } catch (error) {
@@ -99,57 +101,66 @@ export default function Popular() {
 
     return (
         <>
-            <div className="mx-auto container my-20 px-4">
-                <h1 className="flex uppercase my-4 text-xl">Most popular</h1>
-
-                {isLoading ? (
-                    // If isLoading is true, show the loading spinner
-                    <div className="flex items-center justify-center mt-40">
-                        <FiLoader className="text-4xl animate-spin" />
-                    </div>
-                ) : (
-                    // If isLoading is false, show the fetched data
-                    <div className="flex justify-center">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-8">
-                            {fetchRecommend.length > 0 &&
-                                fetchRecommend.map((x) => (
-                                    <div key={x.mal_id} className="w-46">
+            <div className="flex justify-center">
+                <div className="my-20 px-4 md:px-8">
+                    <h1 className="mb-4 uppercase text-lg font-medium md:text-xl">Fans recommendations!</h1>
+                    <div className="flex">
+                        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-8 w-50">
+                            {isLoading
+                                ? Array.from({ length: 25 }).map((_, index) => (
+                                    <div key={`loader-${index}`} className="w-44 relative">
+                                        <div className="text-4xl animate-pulse my-20">
+                                            <GiChicken />
+                                        </div>
+                                    </div>
+                                ))
+                                : getPopular.map((x) => (
+                                    <div key={x.mal_id} className="w-44 relative">
                                         <Link href={`/anime/${x.mal_id}`}>
                                             <img
                                                 src={x.images.jpg.image_url}
-                                                alt={x.title_english}
-                                                className="h-60 transition-transform duration-300 ease-in-out transform-gpu hover:scale-105 hover:opacity-75"
+                                                alt={x.title}
+                                                className="h-60 w-44 transition-transform duration-300 ease-in-out transform-gpu hover:scale-105 hover:opacity-75"
                                             />
-                                            <h3 className="flex-wrap text-sm my-2">{x.title.length > 50 ? `${x.title_english.slice(0, 50)}...` : x.title}</h3>
+                                            <h3 className="flex-wrap text-sm my-2">{x.title.length > 50 ? `${x.title.slice(0, 50)}...` : x.title}</h3>
+                                            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-90 p-4 text-white opacity-0 hover:opacity-100 transition-opacity">
+                                                <h1 className="font-bold mb-2">
+                                                    {x.title.length > 20 ? `${x.title.slice(0, 20)}...` : x.title}
+                                                </h1>
+                                                <p className="text-white">
+                                                    {x.synopsis.length > 120 ? `${x.synopsis.slice(0, 120)}...` : x.synopsis}
+                                                </p>
+                                            </div>
                                         </Link>
                                     </div>
                                 ))}
                         </div>
                     </div>
-                )}
-
-                <div className="flex uppercase justify-center my-20 text-[#ff9100] text-md md:text-lg">
-                    {currentPage > 1 && (
-                        <button onClick={handlePreviousPage}>
-                            <MdOutlineKeyboardDoubleArrowLeft />
-                        </button>
-                    )}
-                    {displayedPages.map((page) => (
-                        <button
-                            key={page}
-                            onClick={() => handlePageClick(page)}
-                            className={`mx-1 px-2 ${currentPage === page ? "text-orange-400" : "text-white"
-                                }`}
-                        >
-                            {page}
-                        </button>
-                    ))}
-                    {currentPage < totalPages && (
-                        <button onClick={handleNextPage}>
-                            <MdOutlineKeyboardDoubleArrowRight />
-                        </button>
-                    )}
                 </div>
+            </div>
+
+
+            <div className="flex uppercase justify-center my-20 text-[#ff9100] text-md md:text-lg">
+                {currentPage > 1 && (
+                    <button onClick={handlePreviousPage}>
+                        <MdOutlineKeyboardDoubleArrowLeft />
+                    </button>
+                )}
+                {displayedPages.map((page) => (
+                    <button
+                        key={page}
+                        onClick={() => handlePageClick(page)}
+                        className={`mx-1 px-2 ${currentPage === page ? "text-orange-400" : "text-white"
+                            }`}
+                    >
+                        {page}
+                    </button>
+                ))}
+                {currentPage < totalPages && (
+                    <button onClick={handleNextPage}>
+                        <MdOutlineKeyboardDoubleArrowRight />
+                    </button>
+                )}
             </div>
         </>
     );
