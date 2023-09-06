@@ -42,7 +42,7 @@ export const Navbar = () => {
                     <div className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200 cursor-pointer" onClick={toggleDropdown}>
                         {isAuthenticated ? (
                             <div className="relative group">
-                                <p className='flex items-center'>{currentUser.name}</p>
+                                <p className="flex items-center" onClick={toggleDropdown}>{currentUser.name}</p>
                                 {showDropdown && (
                                     <div className="absolute top-full right-0 mt-6 w-28 bg-[#202124] rounded">
                                         <ul className="py-2">

@@ -12,6 +12,35 @@ mongoose.connect(MONGO_URI, {
     dbName: "TeriyakiDatabase"
 });
 
+const UserInfo = async (req, res) => {
+    try {
+        // Retrieve the username from the request parameters or the authenticated user's username
+        const username = req.params.username || req.user.username;
+
+        // Find the user in the database by username, excluding the password field
+        const user = await Users.findOne({ username }, { password: 0 });
+
+        if (!user) {
+            // User not found
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // If you have a ratings field in your user schema, include it in the response
+        const userInfoWithRatings = {
+            username: user.username,
+            // Include the ratings field, if available
+            ratings: user.ratings || [], // Assuming 'ratings' is an array of anime ratings
+            // Add other user fields as needed
+        };
+
+        // Return the user information including anime ratings
+        return res.status(200).json(userInfoWithRatings);
+    } catch (error) {
+        // If an error occurs during the process, log the error and send an internal server error response
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 // Post endpoint to signup to the website
 const Signup = async (req, res) => {
@@ -104,4 +133,5 @@ const Login = async (req, res) => {
 module.exports = {
     Signup,
     Login,
+    UserInfo
 };

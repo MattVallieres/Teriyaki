@@ -7,10 +7,11 @@ app.use(express.json())
 // Enable CORS
 app.use(cors());
 
-const { Signup, Login } = require('./handler/users')
+const { Signup, Login, UserInfo } = require('./handler/users')
 
 app.post('/api/signup', Signup);
 app.post('/api/login', Login);
+app.get('/api/userinfo', UserInfo);
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
