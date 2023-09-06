@@ -1,12 +1,18 @@
-const express = require('express')
+const express = require('express');
+const cors = require('cors');
 const PORT = 8000;
+const app = express();
 
-express()
+app.use(express.json())
+// Enable CORS
+app.use(cors());
 
-.get('/', (req, res) => {
-  res.status(200).json({status: 200, message: "Hello!"})
-})
+const { Signup } = require('./handler/users')
 
-.listen(PORT, () => {
+app.post('/api/signup', Signup)
+
+
+
+app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
 })
