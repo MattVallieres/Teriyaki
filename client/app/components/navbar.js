@@ -2,15 +2,26 @@
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { BiSearchAlt } from "react-icons/bi";
 import { GiChicken } from "react-icons/gi";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
+import { AuthContext } from '../context/authContext';
 
 export const Navbar = () => {
-    // We keep track wether the sidebar is open or not
     const [nav, setNav] = useState(false);
-    // When the button is clicked open the side bar
+    const { isAuthenticated, currentUser, logout } = useContext(AuthContext);
+    const [showDropdown, setShowDropdown] = useState(false);
+
     const handleNav = () => {
-        setNav(!nav)
+        setNav(!nav);
+    };
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    const handleLogout = () => {
+        logout();
+        setShowDropdown(false); // Close the dropdown after signing out
     };
 
     return (
@@ -28,8 +39,28 @@ export const Navbar = () => {
                         <Link href="/recommendation" className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Recommendation</Link>
                         <Link href="/popular" className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Popular</Link>
                     </div>
-                    <div className="flex uppercase font-bold">
-                        <Link href="/login" className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Login</Link>
+                    <div className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200 cursor-pointer" onClick={toggleDropdown}>
+                        {isAuthenticated ? (
+                            <div className="relative group">
+                                <p className='flex items-center'>{currentUser.name}</p>
+                                {showDropdown && (
+                                    <div className="absolute top-full right-0 mt-6 w-28 bg-[#202124] rounded">
+                                        <ul className="py-2">
+                                            <li><Link href="/profile" className="flex items-center px-4 py-2 hover:bg-[#161616] cursor-pointer">
+                                                Profile
+                                            </Link></li>
+                                            <li className="px-4 py-2 hover:bg-[#161616] cursor-pointer" onClick={handleLogout}>
+                                                Sign Out
+                                            </li>
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <Link href="/login" className="flex items-center justify-center text-neutral-300 hover:bg-neutral-900 hover:text-slate-50 duration-200">
+                                Login
+                            </Link>
+                        )}
                     </div>
                 </div>
             </div>

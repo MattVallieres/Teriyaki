@@ -72,6 +72,36 @@ const Signup = async (req, res) => {
     }
 };
 
+const Login = async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        // Find the user in the database
+        const user = await Users.findOne({ username });
+
+        if (!user) {
+            // User not found in the database
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Compare the provided password with the stored password
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+            // Invalid password
+            return res.status(401).json({ message: 'Invalid password' });
+        }
+
+        // Password is correct, user is logged in
+        return res.status(200).json({ message: 'Login successful', user: { name: user.username } });
+    } catch (error) {
+        // If an error occurs during the process, log the error and send an internal server error response
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 module.exports = {
     Signup,
+    Login,
 };
