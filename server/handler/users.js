@@ -30,7 +30,7 @@ const Signup = async (req, res) => {
             // Check if the username exceeds more than 15 letters
             exceedsMaxLength: username.length > 15,
             // Check password must contain 8 letters and 2 numbers
-            passwordRequirements: !(password.match(/[a-zA-Z]/g)?.length >= 8 && password.match(/\d/g)?.length >= 2)
+            passwordRequirements: !(password.match(/[a-zA-Z]/g)?.length >= 8)
         };
 
         // Check if the username has been taken
@@ -52,7 +52,7 @@ const Signup = async (req, res) => {
                 return res.status(400).json({ error: "Username cannot exceed 20 characters" });
             case validationType.passwordRequirements:
                 return res.status(400).json({
-                    error: "Password must contain at least 8 letters and 2 numbers",
+                    error: "Password must contain at least 8"
                 });
             case validationType.existingUser:
                 return res.status(400).json({ error: "Username is taken" });
