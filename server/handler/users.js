@@ -16,7 +16,6 @@ const UserInfo = async (req, res) => {
     try {
         // Retrieve the username from the request parameters or the authenticated user's username
         const username = req.params.username || req.user.username;
-
         // Find the user in the database by username, excluding the password field
         const user = await Users.findOne({ username }, { password: 0 });
 
@@ -25,16 +24,8 @@ const UserInfo = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // If you have a ratings field in your user schema, include it in the response
-        const userInfoWithRatings = {
-            username: user.username,
-            // Include the ratings field, if available
-            ratings: user.ratings || [], // Assuming 'ratings' is an array of anime ratings
-            // Add other user fields as needed
-        };
-
-        // Return the user information including anime ratings
-        return res.status(200).json(userInfoWithRatings);
+        // Return the user information without the password field
+        return res.status(200).json({ user });
     } catch (error) {
         // If an error occurs during the process, log the error and send an internal server error response
         console.error(error);
@@ -42,7 +33,6 @@ const UserInfo = async (req, res) => {
     }
 };
 
-// Post endpoint to signup to the website
 const Signup = async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -86,10 +76,10 @@ const Signup = async (req, res) => {
             case validationType.existingUser:
                 return res.status(400).json({ error: "Username is taken" });
             default:
-                // Using bcrypt to has the password in the database
+                // Using bcrypt to hash the password in the database
                 const hashedPassword = await bcrypt.hash(password, 10);
-                // Push the information in the "Users" database
-                const user = new Users({ username, password: hashedPassword });
+                // Include an empty ratings array in the user document
+                const user = new Users({ username, password: hashedPassword, ratings: [] });
                 await user.save();
                 console.log("Account successfully created!");
                 res.sendStatus(201);
@@ -101,6 +91,7 @@ const Signup = async (req, res) => {
     }
 };
 
+// Login route
 const Login = async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -121,7 +112,9 @@ const Login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid password' });
         }
 
-        // Password is correct, user is logged in
+        // Password is correct, add user data to the req object
+        req.user = user;
+
         return res.status(200).json({ message: 'Login successful', user: { name: user.username } });
     } catch (error) {
         // If an error occurs during the process, log the error and send an internal server error response
@@ -133,5 +126,5 @@ const Login = async (req, res) => {
 module.exports = {
     Signup,
     Login,
-    UserInfo
+    UserInfo,
 };

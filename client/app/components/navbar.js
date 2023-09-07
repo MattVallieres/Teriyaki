@@ -1,70 +1,95 @@
 "use client"
-import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
-import { BiSearchAlt } from "react-icons/bi";
-import { GiChicken } from "react-icons/gi";
-import React, { useState, useContext } from "react";
-import Link from "next/link";
+import Link from 'next/link';
+import React, { useState, useContext } from 'react';
+import { BiSearchAlt, BiLogOut } from 'react-icons/bi';
+import { GiChicken } from 'react-icons/gi'
+import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
+import { FiBookmark, FiUser } from "react-icons/fi"
+
+
 import { AuthContext } from '../context/authContext';
 
 export const Navbar = () => {
-    const [nav, setNav] = useState(false);
+    // Keep track wether the user is signed in, authenticated and handle log out session
     const { isAuthenticated, currentUser, logout } = useContext(AuthContext);
-    const [showDropdown, setShowDropdown] = useState(false);
+    // Keep track wether the dropdown is open or not
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    // Keep track wether the hamburger is open or not
+    const [nav, setNav] = useState(false);
 
+    // Function to show dropwdown or not
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+    };
+
+    // Function to show nav or not
     const handleNav = () => {
         setNav(!nav);
     };
 
-    const toggleDropdown = () => {
-        setShowDropdown(!showDropdown);
-    };
-
+    // Function to lout out the user
     const handleLogout = () => {
         logout();
-        setShowDropdown(false); // Close the dropdown after signing out
     };
 
     return (
-        <nav className="bg-[#202124]">
-            <div className="flex mx-auto justify-between h-[3.75rem] ">
-                <div className="flex">
-                    <div onClick={handleNav} className="flex items-center justify-center p-4 text-neutral-300 hover:bg-neutral-900 hover:text-slate-50 duration-200 md:hidden">
+        <nav className="bg-[#202124] relative font-light z-20 text-neutral-300">
+            <div className="flex mx-auto justify-between">
+                <div className="h-[3.75rem] flex">
+                    {/* Hamburger */}
+                    <div onClick={handleNav} className="flex items-center justify-center p-4 text-neutral-300 hover:text-slate-50 duration-200 cursor-pointer md:hidden">
                         <AiOutlineMenu className="text-xl" />
                     </div>
-                    <Link href="/" className="flex items-center justify-center uppercase text-orange-400 font-bold text-xl md:text-2xl p-4">Teriyaki<GiChicken className='ml-2 flex' /></Link>
+                    {/* Title */}
+                    <Link href="/" className="flex items-center justify-center uppercase text-orange-400 font-bold text-xl md:text-2xl p-4">Teriyaki<GiChicken className='ml-2 flex hidden md:flex' /></Link>
                 </div>
-                <div className="flex font-bold uppercase text-sm">
-                    <Link href="/search" className="flex items-center px-4 justify-center text-lg text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200"><BiSearchAlt /></Link>
-                    <div className="hidden md:flex">
-                        <Link href="/recommendation" className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Recommendation</Link>
-                        <Link href="/popular" className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Popular</Link>
+                {/* Navigation and Search */}
+                <div className="flex font-medium">
+                    {/* Search */}
+                    <Link href="/search" className="flex items-center px-4 justify-center text-lg hover:text-slate-50 duration-200"><BiSearchAlt /></Link>
+                    <div className="hidden md:flex h-[3.75rem]">
+                        {/* Navigation */}
+                        <Link href="/popular" className="flex px-4 items-center hover:text-slate-50 duration-200">Popular</Link>
+                        <Link href="/recommendation" className="flex px-4 items-center hover:text-slate-50 duration-200">Recommendation</Link>
                     </div>
-                    <div className="flex items-center px-4 text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200 cursor-pointer" onClick={toggleDropdown}>
-                        {isAuthenticated ? (
-                            <div className="relative group">
-                                <p className="flex items-center" onClick={toggleDropdown}>{currentUser.name}</p>
-                                {showDropdown && (
-                                    <div className="absolute top-full right-0 mt-6 w-28 bg-[#202124] rounded">
-                                        <ul className="py-2">
-                                            <li><Link href="/profile" className="flex items-center px-4 py-2 hover:bg-[#161616] cursor-pointer">
-                                                Profile
-                                            </Link></li>
-                                            <li className="px-4 py-2 hover:bg-[#161616] cursor-pointer" onClick={handleLogout}>
-                                                Sign Out
-                                            </li>
-                                        </ul>
-                                    </div>
-                                )}
-                            </div>
+
+                    {/* Dropdown and User Navigation */}
+                    <div className="flex">
+                        {isAuthenticated && currentUser ? (
+                            <button onClick={toggleDropdown} className="px-4 relative">
+                                {/* User Profile Picture */}
+                                <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-600">
+                                    {currentUser.name}
+                                </div>
+                            </button>
                         ) : (
-                            <Link href="/login" className="flex items-center justify-center text-neutral-300 hover:bg-neutral-900 hover:text-slate-50 duration-200">
+                            <Link href="/login" className="flex px-4 items-center font-medium text-neutral-300 hover:text-slate-50 duration-200">
                                 Login
                             </Link>
+                        )}
+
+                        {isDropdownOpen && (
+                            <div className="absolute top-[3.75rem] w-60 right-0 bg-[#161616] md:w-72">
+                                <div className="flex p-2 items-center my-2">
+                                    <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold text-sm mr-2">
+                                        {currentUser.name}
+                                    </div>
+                                    <h1 className="flex py-2 items-center block hover:bg-neutral-900"> {currentUser.name} </h1>
+                                </div>
+                                    {/* User Navigation */}
+                                    <Link href="/bookmarks" className="flex p-2 items-center hover:bg-neutral-800 hover:text-slate-50 duration-200"><FiBookmark className="mr-2" /> Bookmarks</Link>
+                                    <Link href="/profile" className="flex p-2 items-center hover:bg-neutral-800 hover:text-slate-50 duration-200"><FiUser className="mr-2" /> My Account</Link>
+                                    <span onClick={handleLogout} className="flex p-2 items-center hover:bg-neutral-600 hover:bg-neutral-800 cursor-pointer hover:text-slate-50 duration-200"><BiLogOut className="mr-2" />Logout</span>
+                                </div>
                         )}
                     </div>
                 </div>
             </div>
+
+
             {nav && <div className="bg-black/20 fixed w-full h-screen z-10 top-0 right-0"></div>}
+
+            {/* Side Drawer */}
             <div
                 className={
                     nav
@@ -72,19 +97,32 @@ export const Navbar = () => {
                         : 'fixed top-0 right-[-100%] w-[250px] h-screen z-10 duration-300'
                 }
             >
+
+                {/* Close Side Drawer */}
                 <div className="items-center flex p-4">
-                    <h1 onClick={handleNav} className="text-[#d4d4d4] text-2xl absolute mt-8 cursor-pointer"><AiOutlineClose /></h1>
+                    <h1 onClick={handleNav} className="flex items-center text-xl absolute mt-8 text-md cursor-pointer"><AiOutlineClose /></h1>
                 </div>
-                <ul className="pt-10 flex flex-col p-4 text-md uppercase font-bold">
-                    <li className="flex text-xs text-[#818283]">BROWSE</li>
-                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/" onClick={handleNav}>Home</Link></li>
-                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/recommendation" onClick={handleNav}>Recommendation</Link></li>
-                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/popular" onClick={handleNav}>Popular</Link></li>
-                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/search" onClick={handleNav} className="flex items-center justify-center text-neutral-300 hover:bg-[#161616] hover:text-slate-50 duration-200">Search</Link></li>
-                    <li className="flex text-xs text-[#818283] mt-4">ACCOUNT</li>
-                    <li className="py-2 flex text-[#d4d4d4]"><Link href="/login" onClick={handleNav}>Login</Link></li>
+
+                {/* Navigation */}
+                <ul className="pt-10 flex flex-col p-4 text-md ">
+                    <li className="flex text-xs uppercase text-[#818283] font-bold">BROWSE</li>
+                    <li className="py-2 flex hover:text-slate-50 duration-200">
+                        <Link href="/" onClick={handleNav}>
+                            Home
+                        </Link>
+                    </li>
+                    <li className="py-2 flex hover:text-slate-50 duration-200">
+                        <Link href="/recommendation" onClick={handleNav}>
+                            Recommendation
+                        </Link>
+                    </li>
+                    <li className="py-2 flex hover:text-slate-50 duration-200">
+                        <Link href="/popular" onClick={handleNav}>
+                        Popular
+                        </Link>
+                    </li>
                 </ul>
             </div>
-        </nav>
+        </nav >
     );
 };

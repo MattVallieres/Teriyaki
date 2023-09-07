@@ -1,4 +1,5 @@
 const { Ratings } = require('./Schema');
+const { Users} = require('./Schema')
 
 // Get the rating for that anime and the users who have rated it
 const getRating = async (req, res) => {
@@ -17,7 +18,6 @@ const getRating = async (req, res) => {
     }
 };
 
-// Add Rating when user rates the anime
 const addRating = async (req, res) => {
     try {
         const { animeId } = req.params;
@@ -39,6 +39,12 @@ const addRating = async (req, res) => {
 
         // Save the rating to the database
         await newRating.save();
+
+        // Update the user's ratings field
+        await Users.updateOne(
+            { username },
+            { $push: { ratings: { animeId, rating } } }
+        );
 
         // Return a success response
         res.sendStatus(200);
@@ -98,7 +104,7 @@ const getAverageRating = async (req, res) => {
     }
 };
 
-export default {
+module.exports = {
     addRating,
     getRating,
     getAverageRating,
