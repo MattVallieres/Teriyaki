@@ -6,12 +6,12 @@ export const AuthContext = createContext(null);
 
 // Create a provider component that wraps its children with the UserContext
 export const AuthContextProvider = ({ children }) => {
-
-    //state for user logged in
+    // Keep track of who's logged on
     const [currentUser, setCurrentUser] = useState({});
+    // Keep track wether the user is logged in or not
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [currentUserRating, setCurrentUserRating] = useState(null);
-    const [isBookmarked, setIsBookmarked] = useState(false); 
+    const [isBookmarked, setIsBookmarked] = useState([]); 
 
     const logout = async () => {
         try {
