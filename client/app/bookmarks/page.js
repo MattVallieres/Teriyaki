@@ -54,6 +54,7 @@ export default function Bookmarks() {
         fetchBookmarks();
     }, [isAuthenticated, Username]);
 
+    // remove bookmark
     const removeBookmark = async (animeId) => {
         event.preventDefault(); // Prevent navigation
         try {

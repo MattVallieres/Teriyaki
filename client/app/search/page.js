@@ -72,13 +72,20 @@ export default function Search() {
                                             alt={result.title}
                                             className="h-60 w-44 transition-transform duration-300 ease-in-out transform-gpu hover:scale-105 hover:opacity-75"
                                         />
-                                        <h3 className="flex-wrap text-sm my-2">{result.title.length > 50 ? `${result.title.slice(0, 50)}...` : result.title}</h3>
+                                        <h3 className="flex-wrap text-sm my-2">
+                                            {result.title.length > 50 ? `${result.title.slice(0, 50)}...` : result.title}
+                                        </h3>
                                         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-90 p-4 text-white opacity-0 hover:opacity-100 transition-opacity">
                                             <h1 className="font-bold mb-2">
                                                 {result.title.length > 20 ? `${result.title.slice(0, 20)}...` : result.title}
                                             </h1>
                                             <p className="text-white">
-                                                {result.synopsis.length > 120 ? `${result.synopsis.slice(0, 120)}...` : result.synopsis}
+                                                {/* Add a conditional check for result.synopsis */}
+                                                {result.synopsis
+                                                    ? result.synopsis.length > 120
+                                                        ? `${result.synopsis.slice(0, 120)}...`
+                                                        : result.synopsis
+                                                    : 'Synopsis not available'}
                                             </p>
                                         </div>
                                     </Link>

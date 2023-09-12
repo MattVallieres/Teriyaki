@@ -6,3 +6,28 @@ body {
   background-color: black;
   color: white;
 }
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio (9 / 16 * 100) */
+  height: 0;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.slider-container {
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+.slider-item {
+  display: inline-block;
+  width: 200px; /* Adjust the width based on your design */
+  margin-right: 16px; /* Adjust the margin based on your design */
+}

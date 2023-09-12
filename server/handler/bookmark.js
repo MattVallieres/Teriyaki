@@ -1,4 +1,4 @@
-const { Users, Bookmark } = require('./Schema');
+const { Bookmark } = require('./Schema');
 
 const getAllBookmarks = async (req, res) => {
     try {
@@ -43,10 +43,9 @@ const getBookmark = async (req, res) => {
 
 const addBookmark = async (req, res) => {
     try {
-        const { animeId } = req.params;
-        const { username } = req.body;
+        const { animeId, username } = req.params;
 
-        // Check if the user is authenticated
+        // Check if the user is authenticated (based on the provided username)
         if (!username) {
             return res.status(401).json({ error: 'User not authenticated' });
         }
@@ -59,13 +58,6 @@ const addBookmark = async (req, res) => {
 
         // Save the bookmark to the database
         const savedBookmark = await newBookmark.save();
-
-        // Push the bookmark to the user's bookmarks array
-        const user = await Users.findOne({ username });
-        if (user) {
-            user.bookmarks.push(savedBookmark);
-            await user.save();
-        }
 
         // Log the saved bookmark for debugging
         console.log('Bookmark saved:', savedBookmark);

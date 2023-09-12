@@ -11,7 +11,8 @@ export const AuthContextProvider = ({ children }) => {
     // Keep track wether the user is logged in or not
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [currentUserRating, setCurrentUserRating] = useState(null);
-    const [isBookmarked, setIsBookmarked] = useState([]); 
+    const [isBookmarked, setIsBookmarked] = useState([]);
+
 
     const logout = async () => {
         try {

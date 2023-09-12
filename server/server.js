@@ -24,9 +24,9 @@ app.patch('/anime/:animeId/update-rating', updateRating);
 
 // Bookmark API endpoints
 app.get("/anime/:username/bookmarks", getAllBookmarks);
-app.get('/anime/:animeId/:username/bookmark', getBookmark);
-app.post('/anime/:animeId/bookmark', addBookmark);
-app.delete('/anime/:username/bookmark/:animeId', removeBookmark);
+app.get('/anime/:animeId/bookmark/:username', getBookmark);
+app.post('/anime/:animeId/bookmark/:username', addBookmark);
+app.delete('/anime/:animeId/bookmark/:username', removeBookmark);
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)

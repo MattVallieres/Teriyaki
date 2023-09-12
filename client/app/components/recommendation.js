@@ -55,7 +55,7 @@ export const Recommendations = () => {
               ))
               : recommend.map((x, index) => (
                 <div key={`${x.entry[1].mal_id}-${index}`} className="w-44 relative">
-                  <Link href={`/anime/${x.entry[0].mal_id}`}>
+                  <Link href={`/anime/${x.entry[1].mal_id}`}>
                     <img
                       src={x.entry[1].images.jpg.image_url}
                       alt={x.entry[1].title}

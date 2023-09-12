@@ -5,6 +5,7 @@ import { Popular } from "./components/popular";
 export default function Home() {
   return (
     <>
+
       <Carousel />
       <Recommendations />
       <Popular />
