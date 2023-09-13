@@ -11,3 +11,6 @@ Teriyaki Anime is a MERN project (MongoDB, Express, React, Node) I've also used 
 
 Navbar Desktop 
 ![Navbar](image.png)
+
+Navbar Mobile
+![Navbar Mobile](image-1.png)
