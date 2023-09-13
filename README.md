@@ -28,3 +28,15 @@ Desktop Landing page
 Mobile Landing Page
 
 ![Mobile Landing Page](image-4.png)
+
+Recommendations and Popular Section
+
+![Recommendations and Popular Section](image-5.png)
+
+Reccomendations Section Mobile
+
+![Reccomendations Section Mobile](image-6.png)
+
+Popular Section Mobile
+
+![Popular Section Mobile](image-7.png)
