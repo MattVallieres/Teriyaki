@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { MdOutlinePersonalVideo } from 'react-icons/md';
 import { ImClock2 } from 'react-icons/im';
 import { FiLoader } from 'react-icons/fi';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export const Carousel = () => {
@@ -45,7 +46,7 @@ export const Carousel = () => {
         const fetchAnime = async () => {
             try {
                 // We have a list of anime IDs to find
-                const ids = [30276, 38000, 50265, 34572];
+                const ids = [30276, 16498, 21, 1735];
                 // We'll ask the internet for info about each anime
                 const animePromises = ids.map(async (id) => {
                     // Hey api, give me info about this anime!
@@ -75,25 +76,6 @@ export const Carousel = () => {
 
         fetchAnime();
     }, []);
-
-    // We're going to pick a pretty background for every anime
-    const getBackgroundStyle = (id) => {
-        // Depending on which canime we're talking about (its ID), we'll choose a different background!
-        // I choose Switch since we're not asking anything complicated
-        switch (id) {
-            case 30276:
-                return 'bg-gradient-to-r from-yellow-400 via-yellow-600 to-yellow-400';
-            case 38000:
-                return 'bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900';
-            case 50265:
-                return 'bg-gradient-to-r from-sky-700 via-cyan-600 to-cyan-700';
-            case 34572:
-                return 'bg-gradient-to-r from-amber-800 via-red-900 to-amber-800';
-            default:
-                // If we don't know which anime it is, we won't have any special background, just a boring black one 
-                return '';
-        }
-    };
 
 
     // This is like a remote control for changing anime
@@ -151,6 +133,7 @@ export const Carousel = () => {
         resetSlideshowInterval();
     };
 
+
     return (
         <>
             <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -159,47 +142,40 @@ export const Carousel = () => {
                         <FiLoader className="text-4xl animate-spin" />
                     </div>
                 ) : (
-                    <div className={`flex ${getBackgroundStyle(currentAnime?.mal_id)}`}>
-                        <div className="flex justify-center mx-auto container mb-8 ">
-                            <button onClick={handlePrev} className="mr-4">
-                                <AiFillCaretLeft className="rounded bg-none hover:bg-[#23252b] duration-200 text-5xl p-2" />
-                            </button>
-                            {currentAnime && (
-                                <div className="mt-10 mb-10 flex flex-col md:flex-row lg:w-9/12">
-                                    <img className="h-80 w-60 m-0" src={currentAnime?.images?.jpg?.large_image_url} alt="Banner" />
-                                    <div className="flex flex-col ml-4">
-                                        <h2 className="text-lg md:text-2xl font-bold my-2">
-                                            {currentAnime.title}
-                                        </h2>
 
-                                        <div className="flex text-base">
-                                            <div className="flex items-center rounded bg-[#ffdd95] text-black px-2">
-                                                <ImClock2 className="mr-2" />
-                                                <p>{currentAnime.duration.replace(' per ep', '')}</p>
-                                            </div>
+                    <div className="flex justify-center mx-auto container mb-8 h-[30rem] ">
+                        <button onClick={handlePrev} className="mr-4">
+                            <AiFillCaretLeft className="rounded bg-none hover:bg-[#23252b] duration-200 text-5xl p-2" />
+                        </button>
+                        {currentAnime && (
+                            <div className="mt-10 mb-10 flex flex-col md:flex-row lg:w-10/12">
+                                <img className="h-86 w-72 m-0" src={currentAnime?.images?.jpg?.large_image_url} alt="Banner" />
+                                <div className="flex flex-col ml-4">
+                                        <div className="flex mt-2 justify-center items-center md:justify-start md:items-start">
+                                            <Image
+                                                src={`/title${currentAnime.mal_id}.png`}
+                                                alt={currentAnime.title}
+                                                width={180}
+                                                height={180}
+                                            />
+                                    </div>
 
-                                            <div className="flex items-center rounded bg-[#b0e3af] text-black px-2 ml-2">
-                                                <MdOutlinePersonalVideo className="mr-2" />
-                                                <p>{currentAnime.type}</p>
-                                            </div>
-                                        </div>
-
-                                        <p className="flex my-4 hidden text-md md:flex">{shortenedSynopsis}</p>
-                                        <div className="flex text-sm my-4">
-                                            <Link href={`/anime/${currentAnime.mal_id}`} className="flex items-center p-2 bg-[#23252b] rounded">
-                                                Watch now
-                                            </Link>
-                                        </div>
+                                    <p className="flex bottom my-4 hidden text-md md:flex">{shortenedSynopsis}</p>
+                                    <div className="flex text-sm my-4 justify-center items-center md:justify-start md:items-start">
+                                        <Link href={`/anime/${currentAnime.mal_id}`} className="flex items-center p-2 bg-[#23252b] rounded">
+                                            Watch now
+                                        </Link>
                                     </div>
                                 </div>
-                            )}
-                            <button onClick={handleNext} className="ml-4">
-                                <AiFillCaretRight className="rounded bg-none hover:bg-[#23252b] duration-200 text-5xl p-2" />
-                            </button>
-                        </div>
+                            </div>
+                        )}
+                        <button onClick={handleNext} className="ml-4">
+                            <AiFillCaretRight className="rounded bg-none hover:bg-[#23252b] duration-200 text-5xl p-2" />
+                        </button>
                     </div>
                 )}
-                <div className="px-4 mt-10 justify-center mx-auto container grid grid-cols-2 md:grid-cols-4 gap-4">
+
+                <div className="flex mt-60 md:mt-20 justify-center gap-4">
                     {animeData.length > 0 &&
                         animeData.map((anime, index) => {
                             if (anime && anime.mal_id && anime.title) {
@@ -208,11 +184,10 @@ export const Carousel = () => {
                                         key={anime.mal_id}
                                         onClick={() => handleTitleClick(index)}
                                         className={`p-2 ${currentIndex === index
-                                            ? 'bg-[#414141]'
-                                            : 'bg-[#202124] text-sm'
+                                            ? 'rounded-xl bg-orange-500 h-2 w-2'
+                                            : 'rounded-xl bg-neutral-900 h-2 w-2'
                                             }`}
                                     >
-                                        {anime.title}
                                     </button>
                                 );
                             } else {
