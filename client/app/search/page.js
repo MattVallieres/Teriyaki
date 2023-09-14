@@ -4,18 +4,23 @@ import { GiChicken } from 'react-icons/gi';
 import Link from 'next/link';
 
 export default function Search() {
+    // User's search query
     const [searchTerm, setSearchTerm] = useState('');
+    // Stores the search results obtained from an API request
     const [searchResults, setSearchResults] = useState([]);
+    // Indicates whether data is currently being loaded
     const [isLoading, setIsLoading] = useState(false);
 
+    // Function to handle changes in the search input field
     const handleSearchTermChange = (event) => {
+        // Update the 'searchTerm' state with the current value of the input field
         setSearchTerm(event.target.value);
     };
 
+    // Function to handle the search form submission
     const handleSearchSubmit = async (event) => {
         event.preventDefault();
-
-        // Clear previous search results and set loading state
+        
         setSearchResults([]);
         setIsLoading(true);
 
@@ -26,9 +31,7 @@ export default function Search() {
                 throw new Error(`Error fetching anime data: ${response.status} - ${response.statusText}`);
             }
             const data = await response.json();
-            // Access the results within the nested 'data' array
             const results = data.data;
-            // Update search results and loading state
             setSearchResults(results);
             setIsLoading(false);
         } catch (error) {
@@ -37,9 +40,7 @@ export default function Search() {
         }
     };
 
-    // useEffect to load initial data when the component mounts
     useEffect(() => {
-        // You can add any initial data fetching logic here if needed
     }, []);
 
     return (
@@ -80,7 +81,6 @@ export default function Search() {
                                                 {result.title.length > 20 ? `${result.title.slice(0, 20)}...` : result.title}
                                             </h1>
                                             <p className="text-white">
-                                                {/* Add a conditional check for result.synopsis */}
                                                 {result.synopsis
                                                     ? result.synopsis.length > 120
                                                         ? `${result.synopsis.slice(0, 120)}...`
