@@ -6,7 +6,6 @@ Teriyaki Anime is an anime streaming website where you can watch your favourite 
 # What was used
 Teriyaki Anime is a MERN project (MongoDB, Express, React, Node) I've also used Tailwindcss, Mongoose and Next.js! For the API's I've used Jikan API
 
-
 # A look at the website!
 
 Navbar Desktop 
@@ -40,3 +39,11 @@ Reccomendations Section Mobile
 Popular Section Mobile
 
 ![Popular Section Mobile](image-7.png)
+
+Search Desktop
+
+![Search Desktop](image-8.png)
+
+Search Mobile
+
+![Search Mobile](image-9.png)

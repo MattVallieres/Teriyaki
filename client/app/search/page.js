@@ -95,6 +95,11 @@ export default function Search() {
                     </div>
                 </div>
             )}
+            {searchTerm !== '' && searchResults.length === 0 && !isLoading && (
+                <div className="my-20 px-4 md:px-8 text-center text-gray-500">
+                    No results found.
+                </div>
+            )}
         </div>
     );
 }

@@ -103,7 +103,7 @@ export default function Popular() {
         <>
             <div className="flex justify-center">
                 <div className="my-20 px-4 md:px-8">
-                    <h1 className="mb-4 uppercase text-lg font-medium md:text-xl">Fans recommendations!</h1>
+                    <h1 className="mb-4 uppercase text-lg font-medium md:text-xl">Popular among the fans!</h1>
                     <div className="flex">
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-8 w-50">
                             {isLoading
